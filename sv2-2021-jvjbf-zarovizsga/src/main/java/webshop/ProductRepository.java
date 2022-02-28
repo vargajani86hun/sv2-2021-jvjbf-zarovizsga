@@ -29,7 +29,7 @@ public class ProductRepository {
 
     public long insertProduct(String productName, int price, int stock) {//language=sql
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        return jdbcTemplate.update(con -> {
+        jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(
                     "INSERT INTO products (product_name, price, stock) VALUES (?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, productName);
@@ -37,6 +37,7 @@ public class ProductRepository {
             ps.setLong(3, stock);
             return ps;
         }, keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     public void updateProductStock(long id, int amount) {//language=sql
